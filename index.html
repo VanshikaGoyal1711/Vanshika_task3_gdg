@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketing Campaign Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      :root {
+        --bg-color: #f3f4f6;
+        --card-color: #ffffff;
+        --text-color: #1f2937;
+        --subtle-text: #6b7280;
+        --accent-color: #f59e0b;
+        --sidebar-bg: #1f2937;
+        --sidebar-text: #f9fafb;
+        --sidebar-accent: #f59e0b;
+      }
+
+      .dark {
+        --bg-color: #111827;
+        --card-color: #1f2937;
+        --text-color: #f9fafb;
+        --subtle-text: #9ca3af;
+        --accent-color: #fbbf24;
+        --sidebar-bg: #030712;
+        --sidebar-text: #f9fafb;
+        --sidebar-accent: #fbbf24;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.4s, color 0.4s;
+      }
+
+      .card {
+        background-color: var(--card-color);
+        color: var(--text-color);
+        transition: background-color 0.4s, color 0.4s, box-shadow 0.3s;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .dark .card {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+          0 4px 6px -2px rgba(0, 0, 0, 0.15);
+      }
+
+      #sidebar {
+        background-color: var(--sidebar-bg);
+        color: var(--sidebar-text);
+        transition: transform 0.3s ease-in-out;
+        width: 16rem;
+      }
+
+      .sidebar-link {
+        transition: background-color 0.15s;
+      }
+      .sidebar-link.active {
+        background-color: rgba(251, 191, 36, 0.2);
+        border-left-color: var(--sidebar-accent);
+      }
+
+      @media (max-width: 1023px) {
+        #sidebar {
+          transform: translateX(-100%);
+        }
+        #sidebar.open {
+          transform: translateX(0);
+        }
+      }
+
+      .chart-line-impressions {
+        stroke: #ef4444;
+        stroke-width: 0.5;
+        fill: none;
+      }
+      .chart-line-clicks {
+        stroke: var(--accent-color);
+        stroke-width: 0.5;
+        fill: none;
+      }
+
+      .bar {
+        fill: var(--accent-color);
+        transition: fill 0.3s ease;
+      }
+      .bar:hover {
+        fill: #fcd34d;
+      }
+      .bar-label {
+        font-size: 3px;
+      }
+    </style>
+  </head>
+
+  <body class="light">
+    <div
+      id="sidebar-backdrop"
+      class="fixed inset-0 bg-black opacity-0 transition-opacity duration-300 z-20 lg:hidden pointer-events-none"
+    ></div>
+
+    <div
+      id="notification-box"
+      class="fixed top-5 right-5 z-50 p-3 rounded-lg shadow-xl text-white opacity-0 transition-opacity duration-300 pointer-events-none"
+    ></div>
+
+    <div class="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-30 lg:w-64 w-64 shadow-2xl overflow-y-auto lg:translate-x-0"
+      >
+        <div class="flex flex-col h-full">
+          <div
+            class="flex items-center justify-center h-16 bg-gray-900 dark:bg-black p-4"
+          >
+            <svg
+              class="w-8 h-8 text-amber-400 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              ></path>
+            </svg>
+            <h1 class="text-xl font-extrabold text-white">Pulse Admin</h1>
+          </div>
+
+          <div class="p-6 border-b border-gray-700">
+            <img
+              class="h-12 w-12 rounded-full object-cover ring-2 ring-amber-500 mx-auto"
+              src="https://placehold.co/100x100/f59e0b/ffffff?text=VG"
+              alt="Admin Photo"
+            />
+            <p class="mt-3 text-center text-sm font-semibold text-white">
+              Vanshika Goyal
+            </p>
+            <p class="text-xs text-center text-gray-400 mb-2">Marketing Lead</p>
+
+            <div class="text-center mt-3 space-y-1">
+              <p
+                class="text-xs text-gray-400 truncate"
+                title="vanshika.goyal@pulseadmin.com"
+              >
+                <svg
+                  class="w-3 h-3 inline mr-1 -mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-6 0a2 2 0 012 2v4a2 2 0 01-2 2H9a2 2 0 01-2-2v-4a2 2 0 012-2h6z"
+                  ></path>
+                </svg>
+                vanshika.goyal@pulseadmin.com
+              </p>
+              <button
+                id="send-report-sidebar"
+                class="text-xs font-medium text-amber-400 hover:text-amber-300 transition duration-150 transform active:scale-95"
+              >
+                Send Quick Report
+              </button>
+            </div>
+          </div>
+
+          <nav class="flex-1 px-2 py-4 space-y-2 custom-scroll">
+            <a
+              href="#"
+              id="link-dashboard"
+              data-view="dashboard"
+              class="sidebar-link active flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white hover:bg-gray-700 border-l-4 border-amber-500"
+            >
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                ></path>
+              </svg>
+              Dashboard
+            </a>
+            <a
+              href="#campaign-table-section"
+              id="link-campaigns"
+              data-view="dashboard"
+              class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 border-l-4 border-transparent"
+            >
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m3 0h8m-8 0a1 1 0 00-1-1v-2a1 1 0 011-1h6a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h1"
+                ></path>
+              </svg>
+              Campaigns
+            </a>
+            <a
+              href="#"
+              id="link-finance"
+              data-view="dashboard"
+              class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 border-l-4 border-transparent"
+            >
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2v4c0 1.105 1.343 2 3 2s3-.895 3-2v-4c0-1.105-1.343-2-3-2z"
+                ></path>
+              </svg>
+              Finance
+            </a>
+            <a
+              href="#"
+              id="link-settings"
+              data-view="settings"
+              class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 border-l-4 border-transparent"
+            >
+              <svg
+                class="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20v-2c0-.656-.126-1.283-.356-1.857M17 20v-2c0-.656-.126-1.283-.356-1.857M9 20h5v-2a3 3 0 00-5.356-1.857M9 20v-2c0-.656-.126-1.283-.356-1.857M9 20v-2c0-.656-.126-1.283-.356-1.857M7.5 10a2.5 2.5 0 100-5 2.5 2.5 0 000 5zm5 0a2.5 2.5 0 100-5 2.5 2.5 0 000 5zm5 0a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+                ></path>
+              </svg>
+              Settings
+            </a>
+          </nav>
+
+          <div class="p-4 border-t border-gray-700 flex justify-center">
+            <p class="text-xs text-gray-500">Version 1.2.0</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="flex flex-col flex-1 overflow-y-auto lg:ml-64">
+        <header
+          class="bg-white dark:bg-gray-800 shadow sticky top-0 z-20 transition duration-300"
+        >
+          <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+              <button
+                id="mobile-menu-button"
+                class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  ></path>
+                </svg>
+              </button>
+
+              <h2 class="text-lg font-semibold lg:hidden" id="page-title">
+                Dashboard
+              </h2>
+
+              <div class="flex items-center space-x-4">
+                <select
+                  class="p-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-amber-500 focus:border-amber-500 transition duration-150"
+                >
+                  <option>Last 7 Days</option>
+                  <option>Last 30 Days</option>
+                  <option>Quarterly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main
+          class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition duration-300 w-full"
+        >
+          <div id="dashboard-view">
+            <section
+              class="mb-8 p-8 rounded-xl border-t-4 border-amber-500 bg-cover bg-center relative overflow-hidden"
+              style="
+                background-image: url('https://png.pngtree.com/background/20250110/original/pngtree-orange-simple-background-picture-image_15481533.jpg');
+                background-size: cover;
+                background-position: center;
+                min-height: 200px;
+              "
+              id="top"
+            >
+              <div class="relative z-10 text-white">
+                <h2 class="text-4xl font-extrabold mb-2">
+                  Campaign Performance Summary
+                </h2>
+                <p class="text-sm font-medium opacity-80 mb-4">
+                  Real-time data for all active paid media campaigns across
+                  platforms. Welcome, Vanshika!
+                </p>
+
+                <div class="flex space-x-3 mt-6">
+                  <button
+                    id="data-refresh"
+                    class="px-4 py-2 bg-amber-500 text-white font-bold rounded-lg shadow-md hover:bg-amber-400 transition duration-300 transform active:scale-95"
+                  >
+                    <svg
+                      class="w-4 h-4 inline mr-1 -mt-0.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2.124M9 15h4m-4 0v-4m4 4V11"
+                      ></path>
+                    </svg>
+                    Refresh Metrics
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+              <div class="lg:col-span-2 space-y-8">
+                <section
+                  class="grid grid-cols-2 md:grid-cols-4 gap-6"
+                  id="metric-cards"
+                ></section>
+
+                <section class="p-6 card rounded-xl">
+                  <h3 class="text-xl font-semibold mb-6">
+                    Monthly Campaign Reach (Impressions)
+                  </h3>
+                  <div class="h-64 flex justify-center items-center">
+                    <svg
+                      id="bar-chart"
+                      viewBox="0 0 100 50"
+                      preserveAspectRatio="none"
+                      class="w-full h-full"
+                    ></svg>
+                  </div>
+                </section>
+
+                <section class="p-6 card rounded-xl">
+                  <h3 class="text-xl font-semibold mb-6">
+                    Daily Campaign Engagement
+                  </h3>
+                  <div class="h-64 flex justify-center items-center">
+                    <svg
+                      viewBox="0 0 100 50"
+                      preserveAspectRatio="none"
+                      class="w-full h-full"
+                    >
+                      <line
+                        x1="0"
+                        y1="45"
+                        x2="100"
+                        y2="45"
+                        stroke="var(--subtle-text)"
+                        stroke-width="0.2"
+                      />
+
+                      <polyline
+                        id="impressions-line"
+                        class="chart-line-impressions"
+                        points="0,45 10,25 20,35 30,15 40,20 50,10 60,30 70,22 80,40 90,18 100,28"
+                      />
+
+                      <polyline
+                        id="clicks-line"
+                        class="chart-line-clicks"
+                        points="0,45 10,40 20,38 30,30 40,35 50,25 60,42 70,39 80,44 90,35 100,40"
+                      />
+
+                      <rect x="5" y="5" width="2" height="2" fill="#ef4444" />
+                      <text
+                        x="8"
+                        y="7"
+                        style="font-size: 3px"
+                        fill="var(--text-color)"
+                      >
+                        Impressions
+                      </text>
+
+                      <rect x="25" y="5" width="2" height="2" fill="#f59e0b" />
+                      <text
+                        x="28"
+                        y="7"
+                        style="font-size: 3px"
+                        fill="var(--text-color)"
+                      >
+                        Clicks
+                      </text>
+                    </svg>
+                  </div>
+                </section>
+              </div>
+
+              <div class="lg:col-span-1 space-y-8">
+                <section class="space-y-4">
+                  <h3 class="text-xl font-semibold">Key Indicators</h3>
+                  <div
+                    id="kpi-cards"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4"
+                  ></div>
+                </section>
+
+                <section class="p-6 card rounded-xl">
+                  <h3 class="text-xl font-semibold mb-4">
+                    Campaign Status Breakdown
+                  </h3>
+                  <div
+                    id="pie-chart-container"
+                    class="flex justify-center items-center h-48"
+                  >
+                    <svg
+                      id="pie-chart"
+                      viewBox="0 0 100 100"
+                      class="w-48 h-48"
+                    ></svg>
+                  </div>
+                  <div
+                    id="pie-legend"
+                    class="mt-4 flex flex-wrap justify-center text-sm"
+                  ></div>
+                </section>
+
+                <section class="p-6 card rounded-xl">
+                  <h3 class="text-xl font-semibold mb-4">Filter Campaigns</h3>
+                  <div class="space-y-3">
+                    <label
+                      for="campaign-filter"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >Status:</label
+                    >
+                    <select
+                      id="campaign-filter"
+                      class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-amber-500 focus:border-amber-500 transition duration-150"
+                    >
+                      <option value="all">All Campaigns</option>
+                      <option value="active">Active (Running)</option>
+                      <option value="paused">Paused</option>
+                      <option value="draft">Draft/Setup</option>
+                    </select>
+                    <button
+                      id="apply-filter"
+                      class="w-full py-2 bg-amber-500 text-white font-bold rounded-lg shadow-md hover:bg-amber-400 transition duration-150 transform active:scale-95 mt-4"
+                    >
+                      Apply Filter
+                    </button>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <section
+              class="p-6 card rounded-xl overflow-x-auto"
+              id="campaign-table-section"
+            >
+              <h3 class="text-xl font-semibold mb-4">Top Campaigns List</h3>
+              <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                    >
+                      Campaign Name
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                    >
+                      Status
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                    >
+                      Spend
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                    >
+                      CTR
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                    >
+                      CPA
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="campaign-table-body"
+                  class="divide-y divide-gray-200 dark:divide-gray-700"
+                ></tbody>
+              </table>
+            </section>
+          </div>
+
+          <div id="settings-view" class="hidden">
+            <h2 class="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
+              Application Settings
+            </h2>
+
+            <section class="mb-8 p-6 card rounded-xl">
+              <h3
+                class="text-2xl font-semibold border-b pb-3 mb-4 border-gray-200 dark:border-gray-700"
+              >
+                Profile Management
+              </h3>
+
+              <div class="flex items-center space-x-6">
+                <img
+                  class="h-16 w-16 rounded-full object-cover ring-2 ring-amber-500"
+                  src="https://www.shutterstock.com/image-photo/young-happy-successful-employee-business-260nw-2261602289.jpg"
+                  alt="Admin Photo"
+                />
+                <div>
+                  <p class="text-lg font-bold">Vanshika Goyal</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    vanshika.goyal@pulseadmin.com
+                  </p>
+                  <button
+                    class="mt-2 text-sm text-amber-500 hover:text-amber-400"
+                  >
+                    Change Photo
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    for="name"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >Full Name</label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    value="Vanshika Goyal"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 bg-gray-50 dark:bg-gray-700 dark:text-white border focus:border-amber-500 focus:ring-amber-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="role"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >Role</label
+                  >
+                  <input
+                    type="text"
+                    id="role"
+                    value="Marketing Lead"
+                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 bg-gray-50 dark:bg-gray-700 dark:text-white border focus:border-amber-500 focus:ring-amber-500"
+                  />
+                </div>
+              </div>
+              <button
+                class="mt-6 px-4 py-2 bg-amber-500 text-white font-bold rounded-lg shadow-md hover:bg-amber-400 transition duration-300"
+              >
+                Save Profile
+              </button>
+            </section>
+
+            <section class="p-6 card rounded-xl">
+              <h3
+                class="text-2xl font-semibold border-b pb-3 mb-4 border-gray-200 dark:border-gray-700"
+              >
+                App Preferences
+              </h3>
+
+              <div
+                class="flex justify-between items-center py-3 border-b border-gray-100 dark:border-gray-700"
+              >
+                <p class="text-lg font-medium">Dark Mode</p>
+                <button
+                  id="theme-toggle-settings"
+                  aria-label="Toggle theme"
+                  class="p-2 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 w-24"
+                >
+                  <svg
+                    id="sun-icon-settings"
+                    class="w-5 h-5 mr-1 hidden"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    ></path>
+                  </svg>
+                  <svg
+                    id="moon-icon-settings"
+                    class="w-5 h-5 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    ></path>
+                  </svg>
+                  <span class="text-sm font-medium" id="theme-label">Dark</span>
+                </button>
+              </div>
+
+              <div class="py-3 border-b border-gray-100 dark:border-gray-700">
+                <p class="text-lg font-medium mb-1">Notifications</p>
+                <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                  <label class="flex items-center justify-between">
+                    Email alerts for critical CPA changes
+                    <input
+                      type="checkbox"
+                      checked
+                      class="form-checkbox h-5 w-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500 transition duration-150"
+                    />
+                  </label>
+                  <label class="flex items-center justify-between">
+                    Mobile push for daily summaries
+                    <input
+                      type="checkbox"
+                      class="form-checkbox h-5 w-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500 transition duration-150"
+                    />
+                  </label>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const sidebar = document.getElementById("sidebar");
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+        const themeToggleSettings = document.getElementById(
+          "theme-toggle-settings"
+        );
+        const pageTitle = document.getElementById("page-title");
+
+        const refreshButton = document.getElementById("data-refresh");
+        const sendReportSidebarButton = document.getElementById(
+          "send-report-sidebar"
+        );
+        const applyFilterButton = document.getElementById("apply-filter");
+        const filterSelect = document.getElementById("campaign-filter");
+        const notificationBox = document.getElementById("notification-box");
+
+        const metricCardsContainer = document.getElementById("metric-cards");
+        const kpiCardsContainer = document.getElementById("kpi-cards");
+        const campaignTableBody = document.getElementById(
+          "campaign-table-body"
+        );
+        const impressionsLine = document.getElementById("impressions-line");
+        const clicksLine = document.getElementById("clicks-line");
+        const barChartSvg = document.getElementById("bar-chart");
+
+        const PIE_COLORS = {
+          active: "#10b981",
+          paused: "#f59e0b",
+          draft: "#60a5fa",
+        };
+
+        const VIEWS = {
+          dashboard: {
+            element: document.getElementById("dashboard-view"),
+            linkId: "link-dashboard",
+            title: "Dashboard",
+          },
+          settings: {
+            element: document.getElementById("settings-view"),
+            linkId: "link-settings",
+            title: "Settings",
+          },
+        };
+        let currentView = "dashboard";
+
+        const sunIconSettings = document.getElementById("sun-icon-settings");
+        const moonIconSettings = document.getElementById("moon-icon-settings");
+        const themeLabel = document.getElementById("theme-label");
+
+        const setTheme = (theme) => {
+          body.classList.remove("light", "dark");
+          body.classList.add(theme);
+          localStorage.setItem("theme", theme);
+
+          const accentColor = theme === "dark" ? "#fbbf24" : "#f59e0b";
+          document.documentElement.style.setProperty(
+            "--accent-color",
+            accentColor
+          );
+          document.documentElement.style.setProperty(
+            "--sidebar-accent",
+            accentColor
+          );
+
+          // Update settings page icons/label
+          if (theme === "dark") {
+            sunIconSettings.classList.remove("hidden");
+            moonIconSettings.classList.add("hidden");
+            themeLabel.textContent = "Light";
+          } else {
+            sunIconSettings.classList.add("hidden");
+            moonIconSettings.classList.remove("hidden");
+            themeLabel.textContent = "Dark";
+          }
+        };
+
+        setTheme(localStorage.getItem("theme") || "light");
+
+        themeToggleSettings.addEventListener("click", () => {
+          const newTheme = body.classList.contains("light") ? "dark" : "light";
+          setTheme(newTheme);
+        });
+
+        const toggleSidebar = (forceClose = false) => {
+          const isOpen = sidebar.classList.contains("open");
+
+          if (forceClose || isOpen) {
+            sidebar.classList.remove("open");
+            sidebarBackdrop.classList.remove("opacity-50");
+            sidebarBackdrop.classList.add("opacity-0", "pointer-events-none");
+          } else {
+            sidebar.classList.add("open");
+            sidebarBackdrop.classList.remove(
+              "opacity-0",
+              "pointer-events-none"
+            );
+            sidebarBackdrop.classList.add("opacity-50");
+          }
+        };
+
+        mobileMenuButton.addEventListener("click", () => toggleSidebar());
+        sidebarBackdrop.addEventListener("click", () => toggleSidebar(true));
+
+        const navigateTo = (viewId, anchor = null) => {
+          for (const key in VIEWS) {
+            VIEWS[key].element.classList.add("hidden");
+          }
+          VIEWS[viewId].element.classList.remove("hidden");
+          currentView = viewId;
+
+          pageTitle.textContent = VIEWS[viewId].title;
+
+          if (anchor) {
+            setTimeout(() => {
+              const targetElement = document.getElementById(
+                anchor.replace("#", "")
+              );
+              if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 100);
+          } else {
+            document
+              .querySelector(".flex-1.overflow-y-auto")
+              .scrollTo({ top: 0, behavior: "smooth" });
+          }
+
+          if (window.innerWidth < 1024) {
+            toggleSidebar(true);
+          }
+        };
+
+        const showNotification = (message, type = "info") => {
+          let colorClass = "";
+          if (type === "success") {
+            colorClass = "bg-green-600";
+          } else if (type === "error") {
+            colorClass = "bg-red-600";
+          } else {
+            colorClass = "bg-amber-600";
+          }
+
+          notificationBox.className = `fixed top-5 right-5 z-50 p-3 rounded-lg shadow-xl text-white opacity-0 transition-opacity duration-300 pointer-events-none ${colorClass}`;
+          notificationBox.textContent = message;
+          notificationBox.classList.remove("opacity-0");
+          notificationBox.classList.add("opacity-100");
+
+          setTimeout(() => {
+            notificationBox.classList.remove("opacity-100");
+            notificationBox.classList.add("opacity-0");
+          }, 4000);
+        };
+
+        let allCampaigns = [];
+
+        const generateCampaigns = () => {
+          const names = [
+            "Q4 Launch SEO",
+            "Holiday Video Ad",
+            "Affiliate Drive",
+            "Q3 Retargeting",
+            "Social Beta Test",
+            "Email Blast",
+            "Content Push",
+            "Paid Search Q1",
+            "Social Media Q2",
+            "Influencer Collab",
+          ];
+          const statuses = [
+            "active",
+            "active",
+            "paused",
+            "draft",
+            "active",
+            "active",
+            "paused",
+            "active",
+            "active",
+            "draft",
+          ];
+
+          return names.map((name, index) => ({
+            id: index,
+            name: name,
+            status: statuses[index],
+            spend: (Math.random() * 5000 + 1000).toFixed(2),
+            ctr: (Math.random() * 2 + 1.5).toFixed(2) + "%",
+            cpa: (Math.random() * 50 + 20).toFixed(2),
+          }));
+        };
+
+        const generateBarChartData = () => {
+          const months = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+          ];
+          return months.map((month) => ({
+            month: month,
+            value: Math.floor(Math.random() * 80 + 20),
+          }));
+        };
+
+        const generateData = () => {
+          const impressions = Math.floor(Math.random() * 200000 + 50000);
+          const clicks = Math.floor(
+            impressions * (Math.random() * 0.05 + 0.03)
+          );
+          const totalSpend = Math.random() * 30000 + 10000;
+          const costPerAcquisition =
+            totalSpend / Math.floor(Math.random() * 500 + 50);
+
+          const getChartPoints = (base, variance, count) => {
+            return Array.from({ length: count }, (_, i) => {
+              const x = (i / (count - 1)) * 100;
+              const y = 45 - (Math.random() * variance + base);
+              return `${x.toFixed(1)},${y.toFixed(1)}`;
+            }).join(" ");
+          };
+
+          allCampaigns = generateCampaigns();
+
+          return {
+            metrics: [
+              {
+                title: "Total Impressions",
+                value: impressions.toLocaleString(),
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>',
+              },
+              {
+                title: "Total Clicks",
+                value: clicks.toLocaleString(),
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5l5-5 5 5"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18V6"></path>',
+              },
+              {
+                title: "Avg. CPA",
+                value: `$${costPerAcquisition.toFixed(2)}`,
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9v3m-4-3V9m4-3v2m-4-2V7m-4 3v3m-4-3V9m4-3v2m-4-2V7m4 6v3m-4-3v3m-4 0h12a2 2 0 002-2v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2a2 2 0 002 2z"></path>',
+              },
+              {
+                title: "Total Spend",
+                value: `$${totalSpend
+                  .toFixed(2)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2v4c0 1.105 1.343 2 3 2s3-.895 3-2v-4c0-1.105-1.343-2-3-2z"></path>',
+              },
+            ],
+            kpis: [
+              {
+                title: "Conversion Rate",
+                value: `${(Math.random() * 1.5 + 4).toFixed(2)}%`,
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8m-4-2H3v-2m10-4v-2M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5z"></path>',
+              },
+              {
+                title: "Click-Through Rate",
+                value: `${((clicks / impressions) * 100).toFixed(2)}%`,
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l2-2l2 2v13"></path>',
+              },
+              {
+                title: "Leads Generated",
+                value: Math.floor(Math.random() * 100 + 50).toString(),
+                icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14c-1.84 0-3.513.844-4.664 2.184A7.001 7.001 0 0012 21a7.001 7.001 0 004.664-1.816C15.513 14.844 13.84 14 12 14z"></path>',
+              },
+            ],
+            impressionPoints: getChartPoints(5, 30, 15),
+            clickPoints: getChartPoints(2, 15, 15),
+            monthlyPerformance: generateBarChartData(),
+            campaigns: allCampaigns,
+          };
+        };
+
+        const renderMetricCards = (metrics) => {
+          metricCardsContainer.innerHTML = metrics
+            .map(
+              (metric) => `
+                    <div class="p-5 card rounded-xl hover:shadow-xl hover:transform hover:-translate-y-0.5 border-l-4 border-amber-500">
+                        <div class="flex items-center justify-between">
+                            <div class="text-xs font-medium uppercase text-gray-500 dark:text-gray-400">${metric.title}</div>
+                            <div class="p-2 rounded-full text-white bg-amber-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">${metric.icon}</svg>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-2xl font-bold">${metric.value}</p>
+                    </div>
+                `
+            )
+            .join("");
+        };
+
+        const renderKpiCards = (kpis) => {
+          kpiCardsContainer.innerHTML = kpis
+            .map(
+              (kpi) => `
+                    <div class="p-4 card rounded-xl flex items-center justify-between border-b-2 border-amber-500">
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">${kpi.title}</p>
+                        <p class="text-xl font-bold text-amber-500">${kpi.value}</p>
+                    </div>
+                `
+            )
+            .join("");
+        };
+
+        const renderLineChart = (impressionPoints, clickPoints) => {
+          impressionsLine.setAttribute("points", impressionPoints);
+          clicksLine.setAttribute("points", clickPoints);
+        };
+
+        const renderCampaignTable = (campaigns) => {
+          campaignTableBody.innerHTML = campaigns
+            .map((campaign) => {
+              let statusClass = "";
+              if (campaign.status === "active") {
+                statusClass =
+                  "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+              } else if (campaign.status === "paused") {
+                statusClass =
+                  "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
+              } else {
+                statusClass =
+                  "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+              }
+
+              return `
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${
+                              campaign.name
+                            }</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                                    ${
+                                      campaign.status.charAt(0).toUpperCase() +
+                                      campaign.status.slice(1)
+                                    }
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">$${
+                              campaign.spend
+                            }</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${
+                              campaign.ctr
+                            }</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">$${
+                              campaign.cpa
+                            }</td>
+                        </tr>
+                    `;
+            })
+            .join("");
+        };
+
+        const renderPieChart = (campaigns) => {
+          /* ... (function remains the same) ... */
+          const statusCounts = campaigns.reduce((acc, campaign) => {
+            acc[campaign.status] = (acc[campaign.status] || 0) + 1;
+            return acc;
+          }, {});
+
+          const total = campaigns.length;
+          let startAngle = 0;
+          const slices = [];
+          const legend = [];
+
+          const getSlicePath = (startAngle, endAngle) => {
+            const radius = 50;
+            const x1 = radius + radius * Math.sin(startAngle);
+            const y1 = radius - radius * Math.cos(startAngle);
+            const x2 = radius + radius * Math.sin(endAngle);
+            const y2 = radius - radius * Math.cos(endAngle);
+            const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
+
+            return `M ${radius},${radius} L ${x1},${y1} A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2} Z`;
+          };
+
+          for (const status in statusCounts) {
+            const count = statusCounts[status];
+            if (count === 0) continue;
+
+            const percentage = count / total;
+            const angle = percentage * 2 * Math.PI;
+            const endAngle = startAngle + angle;
+
+            const path = getSlicePath(startAngle, endAngle);
+            const color = PIE_COLORS[status];
+
+            slices.push(
+              `<path d="${path}" fill="${color}" stroke="#fff" stroke-width="0.5" />`
+            );
+
+            legend.push(`
+                        <div class="flex items-center mr-4 mb-1">
+                            <div class="w-3 h-3 rounded-full mr-2" style="background-color: ${color};"></div>
+                            <span class="text-gray-700 dark:text-gray-300">${
+                              status.charAt(0).toUpperCase() + status.slice(1)
+                            } (${Math.round(percentage * 100)}%)</span>
+                        </div>
+                    `);
+
+            startAngle = endAngle;
+          }
+
+          document.getElementById("pie-chart").innerHTML = slices.join("");
+          document.getElementById("pie-legend").innerHTML = legend.join("");
+        };
+
+        const renderBarChart = (data) => {
+          barChartSvg.innerHTML = "";
+          const width = 100;
+          const height = 50;
+          const padding = 5;
+          const barWidth = (width - padding * 2) / data.length;
+          const maxVal = 100;
+
+          const bars = data
+            .map((d, i) => {
+              const x = padding + i * barWidth;
+              const barHeight = (d.value / maxVal) * (height - padding * 5); // Scale bar height
+              const y = height - padding * 5 - barHeight;
+              const labelX = x + barWidth / 2;
+              const labelY = height - padding * 2;
+
+              return `
+                        <rect class="bar" 
+                            x="${x + barWidth * 0.1}" y="${y}" 
+                            width="${barWidth * 0.8}" height="${barHeight}" 
+                            rx="0.5" ry="0.5">
+                            <title>${d.month}: ${d.value}k Impressions</title>
+                        </rect>
+                        <text x="${labelX}" y="${labelY}" text-anchor="middle" class="bar-label" fill="var(--text-color)">${
+                d.month
+              }</text>
+                    `;
+            })
+            .join("");
+
+          const xAxis = `<line x1="${padding}" y1="${
+            height - padding * 5
+          }" x2="${width - padding}" y2="${
+            height - padding * 5
+          }" stroke="var(--subtle-text)" stroke-width="0.2" />`;
+
+          barChartSvg.innerHTML = xAxis + bars;
+        };
+
+        const applyFilter = () => {
+          const selectedStatus = filterSelect.value;
+          let filteredCampaigns = allCampaigns;
+
+          if (selectedStatus !== "all") {
+            filteredCampaigns = allCampaigns.filter(
+              (c) => c.status === selectedStatus
+            );
+          }
+
+          renderCampaignTable(filteredCampaigns);
+          showNotification(
+            `Showing ${
+              filteredCampaigns.length
+            } campaigns with status: ${selectedStatus.toUpperCase()}`,
+            "info"
+          );
+        };
+
+        const renderDashboard = () => {
+          const data = generateData();
+          renderMetricCards(data.metrics);
+          renderKpiCards(data.kpis);
+          renderLineChart(data.impressionPoints, data.clickPoints);
+          renderBarChart(data.monthlyPerformance); // Render new bar chart
+          renderCampaignTable(data.campaigns);
+          renderPieChart(data.campaigns);
+        };
+
+        renderDashboard();
+        navigateTo("dashboard");
+
+        document.querySelectorAll(".sidebar-link").forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const viewId = link.getAttribute("data-view");
+            const anchor = link.getAttribute("href");
+
+            document.querySelectorAll(".sidebar-link").forEach((l) => {
+              l.classList.remove("active", "text-white", "border-amber-500");
+              l.classList.add("text-gray-300", "border-transparent");
+            });
+            link.classList.add("active", "text-white", "border-amber-500");
+            link.classList.remove("text-gray-300", "border-transparent");
+
+            if (viewId) {
+              navigateTo(viewId, anchor.startsWith("#") ? anchor : null);
+            }
+
+            if (window.innerWidth < 1024) {
+              toggleSidebar(true);
+            }
+          });
+        });
+
+        refreshButton.addEventListener("click", () => {
+          refreshButton.textContent = "Refreshing...";
+          refreshButton.disabled = true;
+
+          setTimeout(() => {
+            renderDashboard();
+            filterSelect.value = "all";
+            refreshButton.textContent = "Refresh Metrics";
+            refreshButton.disabled = false;
+            showNotification("Campaign data updated successfully.", "success");
+          }, 1200);
+        });
+
+        sendReportSidebarButton.addEventListener("click", () => {
+          sendReportSidebarButton.disabled = true;
+          sendReportSidebarButton.textContent = "Sending...";
+
+          setTimeout(() => {
+            showNotification(
+              "Report successfully sent to vanshika.goyal@pulseadmin.com!",
+              "success"
+            );
+            sendReportSidebarButton.textContent = "Send Quick Report";
+            sendReportSidebarButton.disabled = false;
+          }, 1500);
+        });
+
+        applyFilterButton.addEventListener("click", applyFilter);
+      });
+    </script>
+  </body>
+</html>
